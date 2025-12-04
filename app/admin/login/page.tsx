@@ -104,9 +104,6 @@ export default function AdminLoginPage() {
           </div>
         </div>
 
-        <div className="mt-6 text-center text-sm text-gray-600">
-          <p>По умолчанию: admin@dr-abayevich.kz / admin123</p>
-        </div>
       </div>
     </div>
   );
