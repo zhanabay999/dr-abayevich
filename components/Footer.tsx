@@ -8,14 +8,20 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About */}
           <div>
-            <div className="mb-4">
-              <Image
-                src="/logo.png"
-                alt="Dr. Abayevich Dental Clinic"
-                width={180}
-                height={80}
-                className="h-20 w-auto"
-              />
+            <div className="mb-4 flex items-center space-x-3">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-md flex items-center justify-center">
+                <Image
+                  src="/logo.png"
+                  alt="Dr. Abayevich Dental Clinic"
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <div className="text-white font-bold text-lg leading-tight">Dr. Abayevich</div>
+                <div className="text-yellow-500 text-sm font-semibold">dental clinic</div>
+              </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Стоматология премиум-класса в Астане. Современное оборудование и профессиональные врачи для здоровья вашей улыбки.

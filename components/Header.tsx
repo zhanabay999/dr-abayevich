@@ -12,15 +12,21 @@ export default function Header() {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <Image
-              src="/logo.png"
-              alt="Dr. Abayevich Dental Clinic"
-              width={120}
-              height={80}
-              className="h-16 w-auto"
-              priority
-            />
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden bg-white shadow-md flex items-center justify-center">
+              <Image
+                src="/logo.png"
+                alt="Dr. Abayevich Dental Clinic"
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
+            <div className="hidden sm:block">
+              <div className="text-gray-900 font-bold text-lg leading-tight">Dr. Abayevich</div>
+              <div className="text-yellow-600 text-xs font-semibold">dental clinic</div>
+            </div>
           </Link>
 
           {/* Desktop Menu */}
