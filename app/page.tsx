@@ -171,16 +171,20 @@ export default function Home() {
             <p className="text-xl text-gray-600">Мы находимся в центре Астаны</p>
           </div>
           <div className="max-w-6xl mx-auto">
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg">
-              <iframe
-                src="https://2gis.kz/astana/firm/70000001090485967/tab/reviews?m=71.430347%2C51.091084%2F16"
-                width="100%"
-                height="500"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-lg p-4">
+              <div
+                id="2gis-map"
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    <a class="dg-widget-link" href="http://2gis.kz/nur_sultan/firm/70000001090485967/center/71.42973661422731,51.100476808766125/zoom/16?utm_medium=widget-source&utm_campaign=firmsonmap&utm_source=bigMap">Посмотреть на карте Астаны</a>
+                    <div class="dg-widget-link"><a href="http://2gis.kz/nur_sultan/firm/70000001090485967/photos/70000001090485967/center/71.42973661422731,51.100476808766125/zoom/17?utm_medium=widget-source&utm_campaign=firmsonmap&utm_source=photos">Фотографии компании</a></div>
+                    <div class="dg-widget-link"><a href="http://2gis.kz/nur_sultan/center/71.429738,51.099506/zoom/16/routeTab/rsType/bus/to/71.429738,51.099506╎Dr.Abayevich, стоматология?utm_medium=widget-source&utm_campaign=firmsonmap&utm_source=route">Найти проезд до Dr.Abayevich, стоматология</a></div>
+                    <script charset="utf-8" src="https://widgets.2gis.com/js/DGWidgetLoader.js"></script>
+                    <script charset="utf-8">new DGWidgetLoader({"width":"100%","height":600,"borderColor":"#a3a3a3","pos":{"lat":51.100476808766125,"lon":71.42973661422731,"zoom":16},"opt":{"city":"nur_sultan"},"org":[{"id":"70000001090485967"}]});</script>
+                    <noscript style="color:#c00;font-size:16px;font-weight:bold;">Виджет карты использует JavaScript. Включите его в настройках вашего браузера.</noscript>
+                  `
+                }}
+              />
             </div>
             <div className="mt-8 text-center">
               <a
