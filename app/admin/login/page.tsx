@@ -54,16 +54,16 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                Email
+                Логин
               </label>
               <input
-                type="email"
+                type="text"
                 id="email"
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-500 focus:outline-none transition"
-                placeholder="admin@dr-abayevich.kz"
+                placeholder="Введите логин"
               />
             </div>
 
