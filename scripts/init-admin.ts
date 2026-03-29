@@ -2,8 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local', override: true });
 
 import { db } from '../lib/db';
-import { admins } from '../lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { users } from '../lib/db/schema';
 import bcrypt from 'bcryptjs';
 
 async function initAdmin() {
@@ -11,28 +10,32 @@ async function initAdmin() {
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@dr-abayevich.kz';
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
 
-    console.log('🔧 Инициализация админа...');
+    console.log('🔧 Инициализация суперадмина...');
     console.log('Email из .env.local:', adminEmail);
 
-    // Удаляем всех существующих админов
-    await db.delete(admins);
-    console.log('✓ Все старые админы удалены');
+    // Удаляем всех существующих пользователей
+    await db.delete(users);
+    console.log('✓ Все старые пользователи удалены');
 
-    // Создаем нового админа
+    // Создаем суперадмина
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
-    await db.insert(admins).values({
+    await db.insert(users).values({
       email: adminEmail,
       password: hashedPassword,
       name: 'Администратор',
+      role: 'superadmin',
+      isActive: true,
     });
 
-    console.log('✓ Админ успешно создан!');
+    console.log('✓ Суперадмин успешно создан!');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('📧 Email:', adminEmail);
     console.log('🔑 Password:', adminPassword);
+    console.log('👤 Роль: superadmin');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🌐 URL: http://localhost:3000/admin');
+    console.log('🌐 CRM: http://localhost:3000/crm');
+    console.log('🌐 Admin: http://localhost:3000/admin');
 
     process.exit(0);
   } catch (error) {
