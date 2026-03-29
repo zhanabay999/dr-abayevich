@@ -3,10 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 
 interface Appointment {
-  id: number; patientId: number; doctorId: number; startTime: string;
-  endTime: string; status: string; color: string | null; notes: string | null;
+  id: number; patientId: number; doctorId: number; roomId: number | null;
+  startTime: string; endTime: string; status: string; color: string | null; notes: string | null;
 }
 interface Doctor { id: number; name: string; color: string | null; specialization: string; }
+interface Room { id: number; name: string; color: string | null; }
 interface Patient { id: number; firstName: string; lastName: string; middleName: string | null; phone: string; }
 
 const statusLabels: Record<string, string> = {
@@ -18,26 +19,29 @@ export default function SchedulePage() {
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [roomsList, setRoomsList] = useState<Room[]>([]);
   const [patientMap, setPatientMap] = useState<Record<number, Patient>>({});
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [modalDoctor, setModalDoctor] = useState<number | null>(null);
+  const [modalRoom, setModalRoom] = useState<number | null>(null);
   const [modalHour, setModalHour] = useState<number | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [aptRes, docRes] = await Promise.all([
+      const [aptRes, docRes, roomRes] = await Promise.all([
         fetch(`/api/crm/appointments?date=${date}`),
         fetch('/api/crm/doctors'),
+        fetch('/api/crm/rooms'),
       ]);
       const aptData = await aptRes.json();
       const docData = await docRes.json();
+      const roomData = await roomRes.json();
       const apts: Appointment[] = aptData.appointments || [];
       setAppointments(apts);
       setDoctors(docData.doctors || []);
+      setRoomsList(roomData.rooms || []);
 
-      // Fetch patient names for appointments
       const patientIds = [...new Set(apts.map(a => a.patientId))];
       const pMap: Record<number, Patient> = {};
       for (const pid of patientIds) {
@@ -54,13 +58,12 @@ export default function SchedulePage() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  // Time slots: 08:00 to 20:00, every 30 min
   const slots: string[] = [];
   for (let h = 8; h < 20; h++) {
     slots.push(`${h.toString().padStart(2, '0')}:00`);
     slots.push(`${h.toString().padStart(2, '0')}:30`);
   }
-  const slotHeight = 44; // px per 30-min slot
+  const slotHeight = 44;
 
   const changeDate = (delta: number) => {
     const d = new Date(date);
@@ -68,36 +71,31 @@ export default function SchedulePage() {
     setDate(d.toISOString().split('T')[0]);
   };
 
-  const handleCellClick = (doctorId: number, slotTime: string) => {
+  const handleCellClick = (roomId: number, slotTime: string) => {
     const hour = parseInt(slotTime.split(':')[0]);
-    setModalDoctor(doctorId);
+    setModalRoom(roomId);
     setModalHour(hour);
     setShowModal(true);
   };
 
-  // Calculate appointment position and height in the grid
   const getAptStyle = (apt: Appointment) => {
     const start = new Date(apt.startTime);
     const end = new Date(apt.endTime);
-    const startMinutes = start.getHours() * 60 + start.getMinutes();
-    const endMinutes = end.getHours() * 60 + end.getMinutes();
-    const gridStartMinutes = 8 * 60; // 08:00
-    const top = ((startMinutes - gridStartMinutes) / 30) * slotHeight;
-    const height = Math.max(((endMinutes - startMinutes) / 30) * slotHeight - 2, slotHeight - 2);
+    const startMin = start.getHours() * 60 + start.getMinutes();
+    const endMin = end.getHours() * 60 + end.getMinutes();
+    const top = ((startMin - 480) / 30) * slotHeight;
+    const height = Math.max(((endMin - startMin) / 30) * slotHeight - 2, slotHeight - 2);
     return { top: `${top}px`, height: `${height}px` };
   };
 
-  const getPatientName = (patientId: number) => {
-    const p = patientMap[patientId];
-    return p ? `${p.lastName} ${p.firstName}` : `Пациент #${patientId}`;
+  const getPatientName = (pid: number) => {
+    const p = patientMap[pid];
+    return p ? `${p.lastName} ${p.firstName}` : `#${pid}`;
   };
 
-  const getDoctorName = (doctorId: number) => {
-    const d = doctors.find(doc => doc.id === doctorId);
-    return d?.name || '';
-  };
+  const getDoctorName = (did: number) => doctors.find(d => d.id === did)?.name || '';
+  const getDoctorColor = (did: number) => doctors.find(d => d.id === did)?.color || '#3B82F6';
 
-  // Upcoming patients for left panel
   const upcomingApts = [...appointments]
     .filter(a => a.status !== 'cancelled' && a.status !== 'completed')
     .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
@@ -106,13 +104,11 @@ export default function SchedulePage() {
   const dayOfWeek = selectedDate.toLocaleDateString('ru', { weekday: 'long' });
   const dayNum = selectedDate.getDate();
   const monthName = selectedDate.toLocaleDateString('ru', { month: 'long' });
-
-  // Mini calendar
   const calYear = selectedDate.getFullYear();
   const calMonth = selectedDate.getMonth();
   const firstDay = new Date(calYear, calMonth, 1);
   const lastDay = new Date(calYear, calMonth + 1, 0);
-  const startDow = (firstDay.getDay() + 6) % 7; // Monday=0
+  const startDow = (firstDay.getDay() + 6) % 7;
   const daysInMonth = lastDay.getDate();
   const calWeeks: (number | null)[][] = [];
   let week: (number | null)[] = Array(startDow).fill(null);
@@ -124,36 +120,24 @@ export default function SchedulePage() {
 
   return (
     <div className="flex gap-4 h-[calc(100vh-8rem)]">
-      {/* === LEFT PANEL === */}
+      {/* LEFT PANEL */}
       <div className="w-64 shrink-0 flex flex-col gap-4 overflow-y-auto">
         {/* Mini calendar */}
         <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-2">
             <button onClick={() => { const d = new Date(calYear, calMonth - 1, 1); setDate(d.toISOString().split('T')[0]); }} className="text-gray-400 hover:text-gray-600 text-xs">&laquo;</button>
-            <span className="text-sm font-semibold text-gray-900 capitalize">
-              {selectedDate.toLocaleDateString('ru', { month: 'long', year: 'numeric' })}
-            </span>
+            <span className="text-sm font-semibold text-gray-900 capitalize">{selectedDate.toLocaleDateString('ru', { month: 'long', year: 'numeric' })}</span>
             <button onClick={() => { const d = new Date(calYear, calMonth + 1, 1); setDate(d.toISOString().split('T')[0]); }} className="text-gray-400 hover:text-gray-600 text-xs">&raquo;</button>
           </div>
           <table className="w-full">
-            <thead>
-              <tr>{['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d => (
-                <th key={d} className="text-[10px] text-gray-400 font-normal py-1">{d}</th>
-              ))}</tr>
-            </thead>
+            <thead><tr>{['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d => (<th key={d} className="text-[10px] text-gray-400 font-normal py-1">{d}</th>))}</tr></thead>
             <tbody>
               {calWeeks.map((w, wi) => (
                 <tr key={wi}>{w.map((d, di) => (
                   <td key={di} className="text-center">
                     {d ? (
-                      <button
-                        onClick={() => setDate(`${calYear}-${(calMonth+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`)}
-                        className={`w-7 h-7 rounded-full text-xs transition ${
-                          d === selectedDate.getDate() ? 'bg-amber-500 text-white font-bold' :
-                          d === new Date().getDate() && calMonth === new Date().getMonth() && calYear === new Date().getFullYear() ? 'bg-amber-100 text-amber-700' :
-                          'text-gray-700 hover:bg-gray-100'
-                        }`}
-                      >{d}</button>
+                      <button onClick={() => setDate(`${calYear}-${(calMonth+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`)}
+                        className={`w-7 h-7 rounded-full text-xs transition ${d === selectedDate.getDate() ? 'bg-amber-500 text-white font-bold' : d === new Date().getDate() && calMonth === new Date().getMonth() && calYear === new Date().getFullYear() ? 'bg-amber-100 text-amber-700' : 'text-gray-700 hover:bg-gray-100'}`}>{d}</button>
                     ) : <span className="w-7 h-7 block" />}
                   </td>
                 ))}</tr>
@@ -170,21 +154,19 @@ export default function SchedulePage() {
           <p className="text-xs text-gray-400 capitalize">{monthName} {calYear}</p>
         </div>
 
-        {/* Upcoming patients */}
+        {/* Upcoming */}
         <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100 flex-1 overflow-y-auto">
-          <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">Предстоящие записи</h3>
+          <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">Записи на день</h3>
           {upcomingApts.length === 0 ? (
             <p className="text-xs text-gray-400">Нет записей</p>
           ) : (
             <div className="space-y-2">
               {upcomingApts.map(apt => (
                 <div key={apt.id} className="flex items-start gap-2 p-2 rounded-lg bg-gray-50">
-                  <div className="w-1 h-8 rounded-full shrink-0 mt-0.5" style={{ backgroundColor: apt.color || doctors.find(d => d.id === apt.doctorId)?.color || '#3B82F6' }} />
+                  <div className="w-1 h-8 rounded-full shrink-0 mt-0.5" style={{ backgroundColor: getDoctorColor(apt.doctorId) }} />
                   <div className="min-w-0">
                     <p className="text-xs font-medium text-gray-900 truncate">{getPatientName(apt.patientId)}</p>
-                    <p className="text-[10px] text-gray-500">
-                      Врач: {getDoctorName(apt.doctorId)}
-                    </p>
+                    <p className="text-[10px] text-gray-500">Врач: {getDoctorName(apt.doctorId)}</p>
                     <p className="text-[10px] text-gray-400">
                       {new Date(apt.startTime).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}
                       {' — '}
@@ -198,9 +180,8 @@ export default function SchedulePage() {
         </div>
       </div>
 
-      {/* === CENTER: SCHEDULE GRID === */}
+      {/* CENTER: SCHEDULE GRID */}
       <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-        {/* Top bar */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
           <div className="flex items-center gap-2">
             <button onClick={() => changeDate(-1)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
@@ -211,74 +192,60 @@ export default function SchedulePage() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </button>
           </div>
-          <button onClick={() => setShowModal(true)} className="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">
-            + Записать
-          </button>
+          <button onClick={() => setShowModal(true)} className="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition">+ Записать</button>
         </div>
 
         {loading ? (
           <div className="flex-1 flex items-center justify-center text-gray-400">Загрузка...</div>
-        ) : doctors.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
-            Нет врачей. <a href="/crm/doctors/new" className="text-amber-600 ml-1">Добавить</a>
-          </div>
+        ) : roomsList.length === 0 ? (
+          <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">Нет кабинетов</div>
         ) : (
           <div className="flex-1 overflow-auto">
             <div className="flex min-w-max">
               {/* Time column */}
               <div className="w-14 shrink-0 border-r border-gray-200 bg-gray-50/50">
-                <div className="h-10 border-b border-gray-200" /> {/* header spacer */}
+                <div className="h-10 border-b border-gray-200" />
                 {slots.map(slot => (
                   <div key={slot} className="border-b border-gray-100 flex items-start justify-end pr-2" style={{ height: `${slotHeight}px` }}>
-                    {slot.endsWith(':00') && (
-                      <span className="text-[10px] text-gray-400 font-mono -mt-1.5">{slot}</span>
-                    )}
+                    {slot.endsWith(':00') && <span className="text-[10px] text-gray-400 font-mono -mt-1.5">{slot}</span>}
                   </div>
                 ))}
               </div>
 
-              {/* Doctor columns */}
-              {doctors.map(doc => {
-                const docApts = appointments.filter(a => a.doctorId === doc.id && a.status !== 'cancelled');
+              {/* Room columns */}
+              {roomsList.map(room => {
+                const roomApts = appointments.filter(a => a.roomId === room.id && a.status !== 'cancelled');
                 return (
-                  <div key={doc.id} className="flex-1 min-w-[160px] border-r border-gray-100 last:border-r-0">
-                    {/* Doctor header */}
+                  <div key={room.id} className="flex-1 min-w-[200px] border-r border-gray-100 last:border-r-0">
                     <div className="h-10 border-b border-gray-200 flex items-center justify-center gap-1.5 px-2 bg-gray-50/80">
-                      <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: doc.color || '#3B82F6' }} />
-                      <span className="text-xs font-semibold text-gray-700 truncate">{doc.name}</span>
+                      <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: room.color || '#3B82F6' }} />
+                      <span className="text-xs font-semibold text-gray-700">{room.name}</span>
                     </div>
-
-                    {/* Slots with appointments overlay */}
                     <div className="relative">
-                      {/* Grid lines */}
                       {slots.map(slot => (
-                        <div
-                          key={slot}
+                        <div key={slot}
                           className={`border-b cursor-pointer hover:bg-amber-50/30 transition ${slot.endsWith(':00') ? 'border-gray-200' : 'border-gray-50'}`}
                           style={{ height: `${slotHeight}px` }}
-                          onClick={() => handleCellClick(doc.id, slot)}
+                          onClick={() => handleCellClick(room.id, slot)}
                         />
                       ))}
-
-                      {/* Appointment blocks (absolute positioned) */}
-                      {docApts.map(apt => {
+                      {roomApts.map(apt => {
                         const style = getAptStyle(apt);
-                        const bgColor = apt.color || doc.color || '#3B82F6';
+                        const bgColor = getDoctorColor(apt.doctorId);
                         return (
-                          <div
-                            key={apt.id}
+                          <div key={apt.id}
                             className="absolute left-1 right-1 rounded-md px-2 py-1 text-white overflow-hidden cursor-pointer shadow-sm hover:shadow-md transition-shadow"
                             style={{ ...style, backgroundColor: bgColor }}
-                            onClick={(e) => e.stopPropagation()}
-                          >
+                            onClick={e => e.stopPropagation()}>
                             <p className="text-[11px] font-semibold truncate">{getPatientName(apt.patientId)}</p>
-                            <p className="text-[10px] opacity-80">
+                            <p className="text-[10px] opacity-80">{getDoctorName(apt.doctorId)}</p>
+                            <p className="text-[10px] opacity-70">
                               {new Date(apt.startTime).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}
                               {' — '}
                               {new Date(apt.endTime).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' })}
                             </p>
-                            {parseInt(style.height) > 50 && (
-                              <p className="text-[9px] opacity-60 mt-0.5">{statusLabels[apt.status] || apt.status}</p>
+                            {parseInt(style.height) > 60 && (
+                              <p className="text-[9px] opacity-50 mt-0.5">{statusLabels[apt.status] || apt.status}</p>
                             )}
                           </div>
                         );
@@ -292,21 +259,17 @@ export default function SchedulePage() {
         )}
       </div>
 
-      {/* === MODAL === */}
       {showModal && (
-        <AppointmentModal
-          date={date} doctorId={modalDoctor} hour={modalHour} doctors={doctors}
-          onClose={() => { setShowModal(false); setModalDoctor(null); setModalHour(null); }}
-          onCreated={() => { setShowModal(false); setModalDoctor(null); setModalHour(null); fetchData(); }}
-        />
+        <AppointmentModal date={date} roomId={modalRoom} hour={modalHour} doctors={doctors} rooms={roomsList}
+          onClose={() => { setShowModal(false); setModalRoom(null); setModalHour(null); }}
+          onCreated={() => { setShowModal(false); setModalRoom(null); setModalHour(null); fetchData(); }} />
       )}
     </div>
   );
 }
 
-// === Appointment Modal ===
-function AppointmentModal({ date, doctorId, hour, doctors, onClose, onCreated }: {
-  date: string; doctorId: number | null; hour: number | null; doctors: Doctor[];
+function AppointmentModal({ date, roomId, hour, doctors, rooms, onClose, onCreated }: {
+  date: string; roomId: number | null; hour: number | null; doctors: Doctor[]; rooms: Room[];
   onClose: () => void; onCreated: () => void;
 }) {
   const [loading, setLoading] = useState(false);
@@ -315,7 +278,7 @@ function AppointmentModal({ date, doctorId, hour, doctors, onClose, onCreated }:
   const [patients, setPatients] = useState<Patient[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [form, setForm] = useState({
-    patientId: '', doctorId: doctorId?.toString() || '',
+    patientId: '', doctorId: '', roomId: roomId?.toString() || '',
     startTime: `${hour?.toString().padStart(2, '0') || '09'}:00`,
     endTime: `${((hour || 9) + 1).toString().padStart(2, '0')}:00`,
     status: 'scheduled', notes: '',
@@ -325,11 +288,8 @@ function AppointmentModal({ date, doctorId, hour, doctors, onClose, onCreated }:
     if (patientSearch.length < 2) { setPatients([]); return; }
     const timer = setTimeout(async () => {
       setSearchLoading(true);
-      try {
-        const res = await fetch(`/api/crm/patients?search=${encodeURIComponent(patientSearch)}&limit=10`);
-        const data = await res.json();
-        setPatients(data.patients || []);
-      } catch { setPatients([]); }
+      try { const res = await fetch(`/api/crm/patients?search=${encodeURIComponent(patientSearch)}&limit=10`); const d = await res.json(); setPatients(d.patients || []); }
+      catch { setPatients([]); }
       setSearchLoading(false);
     }, 300);
     return () => clearTimeout(timer);
@@ -339,12 +299,14 @@ function AppointmentModal({ date, doctorId, hour, doctors, onClose, onCreated }:
     e.preventDefault(); setError('');
     if (!form.patientId) { setError('Выберите пациента'); return; }
     if (!form.doctorId) { setError('Выберите врача'); return; }
+    if (!form.roomId) { setError('Выберите кабинет'); return; }
     setLoading(true);
     try {
       const res = await fetch('/api/crm/appointments', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           patientId: parseInt(form.patientId), doctorId: parseInt(form.doctorId),
+          roomId: parseInt(form.roomId),
           startTime: new Date(`${date}T${form.startTime}:00`).toISOString(),
           endTime: new Date(`${date}T${form.endTime}:00`).toISOString(),
           status: form.status, notes: form.notes || null,
@@ -408,6 +370,15 @@ function AppointmentModal({ date, doctorId, hour, doctors, onClose, onCreated }:
               className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900">
               <option value="">Выберите врача</option>
               {doctors.map(d => <option key={d.id} value={d.id}>{d.name} — {d.specialization}</option>)}
+            </select>
+          </div>
+          {/* Room */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Кабинет *</label>
+            <select value={form.roomId} onChange={e => setForm({...form, roomId: e.target.value})} required
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900">
+              <option value="">Выберите кабинет</option>
+              {rooms.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
             </select>
           </div>
           {/* Time */}

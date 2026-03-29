@@ -67,6 +67,7 @@ export async function POST(request: NextRequest) {
     .values({
       patientId: body.patientId,
       doctorId: body.doctorId,
+      roomId: body.roomId || null,
       serviceId: body.serviceId || null,
       startTime: new Date(body.startTime),
       endTime: new Date(body.endTime),

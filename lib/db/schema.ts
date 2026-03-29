@@ -143,11 +143,21 @@ export const patientContacts = pgTable('patient_contacts', {
   relation: varchar('relation', { length: 100 }),
 });
 
+// === CRM: Кабинеты ===
+export const rooms = pgTable('rooms', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull(),
+  color: varchar('color', { length: 20 }).default('#3B82F6'),
+  isActive: boolean('is_active').default(true).notNull(),
+  sortOrder: integer('sort_order').default(0).notNull(),
+});
+
 // === CRM: Записи на приём (расширенные) ===
 export const crmAppointments = pgTable('crm_appointments', {
   id: serial('id').primaryKey(),
   patientId: integer('patient_id').notNull(),
   doctorId: integer('doctor_id').notNull(),
+  roomId: integer('room_id'),
   serviceId: integer('service_id'),
   startTime: timestamp('start_time').notNull(),
   endTime: timestamp('end_time').notNull(),
