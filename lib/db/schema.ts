@@ -182,3 +182,47 @@ export const doctorScheduleExceptions = pgTable('doctor_schedule_exceptions', {
   endTime: time('end_time'),
   reason: text('reason'),
 });
+
+// === CRM: Зубная формула ===
+export const toothStatusEnum = pgEnum('tooth_status', [
+  'healthy', 'caries', 'filling', 'crown', 'missing', 'implant', 'root', 'bridge', 'treatment_needed'
+]);
+
+export const toothRecords = pgTable('tooth_records', {
+  id: serial('id').primaryKey(),
+  patientId: integer('patient_id').notNull(),
+  toothNumber: integer('tooth_number').notNull(), // FDI notation: 11-18, 21-28, 31-38, 41-48
+  status: toothStatusEnum('status').notNull().default('healthy'),
+  notes: text('notes'),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  updatedBy: integer('updated_by'),
+});
+
+// === CRM: Планы лечения ===
+export const treatmentPlanStatusEnum = pgEnum('treatment_plan_status', [
+  'draft', 'approved', 'in_progress', 'completed', 'cancelled'
+]);
+
+export const treatmentPlans = pgTable('treatment_plans', {
+  id: serial('id').primaryKey(),
+  patientId: integer('patient_id').notNull(),
+  doctorId: integer('doctor_id').notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
+  status: treatmentPlanStatusEnum('status').notNull().default('draft'),
+  totalCost: integer('total_cost').default(0),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const treatmentPlanItems = pgTable('treatment_plan_items', {
+  id: serial('id').primaryKey(),
+  planId: integer('plan_id').notNull(),
+  toothNumber: integer('tooth_number'),
+  serviceId: integer('service_id'),
+  description: varchar('description', { length: 500 }).notNull(),
+  cost: integer('cost').default(0),
+  status: varchar('status', { length: 50 }).default('pending').notNull(), // pending, in_progress, completed
+  completedAt: timestamp('completed_at'),
+  sortOrder: integer('sort_order').default(0),
+});
