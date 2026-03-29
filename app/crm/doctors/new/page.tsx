@@ -62,33 +62,33 @@ export default function NewDoctorPage() {
       <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">ФИО *</label>
-          <input name="name" required value={form.name} onChange={handleChange} placeholder="Абаев Арман Сериков" className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+          <input name="name" required value={form.name} onChange={handleChange} placeholder="Абаев Арман Сериков" className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Специализация *</label>
-            <input name="specialization" required value={form.specialization} onChange={handleChange} placeholder="Ортодонт" className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+            <input name="specialization" required value={form.specialization} onChange={handleChange} placeholder="Ортодонт" className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Стаж (лет)</label>
-            <input name="experience" type="number" min="0" value={form.experience} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+            <input name="experience" type="number" min="0" value={form.experience} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
           </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Образование</label>
-          <input name="education" value={form.education} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+          <input name="education" value={form.education} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Рабочий телефон</label>
-            <input name="workPhone" value={form.workPhone} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+            <input name="workPhone" value={form.workPhone} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Личный телефон</label>
-            <input name="personalPhone" value={form.personalPhone} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+            <input name="personalPhone" value={form.personalPhone} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
           </div>
         </div>
 
@@ -103,7 +103,7 @@ export default function NewDoctorPage() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Длительность слота (мин)</label>
-          <select name="slotDuration" value={form.slotDuration} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm">
+          <select name="slotDuration" value={form.slotDuration} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900">
             <option value="15">15 минут</option>
             <option value="30">30 минут</option>
             <option value="45">45 минут</option>
@@ -113,7 +113,7 @@ export default function NewDoctorPage() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">О враче</label>
-          <textarea name="bio" rows={3} value={form.bio} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+          <textarea name="bio" rows={3} value={form.bio} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
         </div>
 
         {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg">{error}</div>}

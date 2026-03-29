@@ -66,7 +66,7 @@ export default function PatientsPage() {
           placeholder="Поиск по ФИО, телефону, ИИН..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+          className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
         />
       </div>
 

@@ -135,23 +135,23 @@ export default function DoctorDetailPage() {
           {editing ? (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-xs font-medium text-gray-500 mb-1">ФИО</label><input name="name" value={form.name} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" /></div>
-                <div><label className="block text-xs font-medium text-gray-500 mb-1">Специализация</label><input name="specialization" value={form.specialization} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" /></div>
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">ФИО</label><input name="name" value={form.name} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">Специализация</label><input name="specialization" value={form.specialization} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-xs font-medium text-gray-500 mb-1">Стаж (лет)</label><input name="experience" type="number" value={form.experience} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" /></div>
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">Стаж (лет)</label><input name="experience" type="number" value={form.experience} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
                 <div><label className="block text-xs font-medium text-gray-500 mb-1">Слот (мин)</label>
-                  <select name="slotDuration" value={form.slotDuration} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm">
+                  <select name="slotDuration" value={form.slotDuration} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900">
                     <option value="15">15</option><option value="30">30</option><option value="45">45</option><option value="60">60</option>
                   </select></div>
               </div>
-              <div><label className="block text-xs font-medium text-gray-500 mb-1">Образование</label><input name="education" value={form.education} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" /></div>
+              <div><label className="block text-xs font-medium text-gray-500 mb-1">Образование</label><input name="education" value={form.education} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
               <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-xs font-medium text-gray-500 mb-1">Раб. телефон</label><input name="workPhone" value={form.workPhone} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" /></div>
-                <div><label className="block text-xs font-medium text-gray-500 mb-1">Личный телефон</label><input name="personalPhone" value={form.personalPhone} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" /></div>
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">Раб. телефон</label><input name="workPhone" value={form.workPhone} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">Личный телефон</label><input name="personalPhone" value={form.personalPhone} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
               </div>
               <div><label className="block text-xs font-medium text-gray-500 mb-1">Цвет</label><div className="flex gap-2">{colors.map(c => (<button key={c} type="button" onClick={() => setForm({...form, color: c})} className={`w-8 h-8 rounded-full border-2 ${form.color === c ? 'border-gray-900 scale-110' : 'border-transparent'}`} style={{backgroundColor: c}} />))}</div></div>
-              <div><label className="block text-xs font-medium text-gray-500 mb-1">О враче</label><textarea name="bio" rows={3} value={form.bio} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" /></div>
+              <div><label className="block text-xs font-medium text-gray-500 mb-1">О враче</label><textarea name="bio" rows={3} value={form.bio} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-4">
@@ -183,10 +183,10 @@ export default function DoctorDetailPage() {
                 {day.isActive && (
                   <div className="flex items-center gap-2">
                     <input type="time" value={day.startTime} onChange={(e) => updateScheduleDay(day.dayOfWeek, 'startTime', e.target.value)}
-                      className="px-2 py-1.5 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+                      className="px-2 py-1.5 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
                     <span className="text-gray-400">—</span>
                     <input type="time" value={day.endTime} onChange={(e) => updateScheduleDay(day.dayOfWeek, 'endTime', e.target.value)}
-                      className="px-2 py-1.5 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+                      className="px-2 py-1.5 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
                   </div>
                 )}
                 {!day.isActive && <span className="text-xs text-gray-400">Выходной</span>}

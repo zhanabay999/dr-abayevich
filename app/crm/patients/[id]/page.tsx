@@ -179,7 +179,7 @@ export default function PatientDetailPage() {
                 <label className="block text-xs font-medium text-gray-500 mb-1">{f.label}</label>
                 {editing ? (
                   <input name={f.name} type={f.type || 'text'} value={form[f.name] || ''} onChange={handleChange}
-                    className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
                 ) : (
                   <p className="text-sm text-gray-900">{(patient as unknown as Record<string, string>)[f.name] || '-'}</p>
                 )}
@@ -188,7 +188,7 @@ export default function PatientDetailPage() {
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Пол</label>
               {editing ? (
-                <select name="gender" value={form.gender || ''} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm">
+                <select name="gender" value={form.gender || ''} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900">
                   <option value="">—</option><option value="male">М</option><option value="female">Ж</option>
                 </select>
               ) : (
@@ -198,12 +198,12 @@ export default function PatientDetailPage() {
           </div>
           <div className="mt-4">
             <label className="block text-xs font-medium text-gray-500 mb-1">Адрес</label>
-            {editing ? <input name="address" value={form.address || ''} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+            {editing ? <input name="address" value={form.address || ''} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
               : <p className="text-sm text-gray-900">{patient.address || '-'}</p>}
           </div>
           <div className="mt-4">
             <label className="block text-xs font-medium text-gray-500 mb-1">Заметки</label>
-            {editing ? <textarea name="notes" rows={3} value={form.notes || ''} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm" />
+            {editing ? <textarea name="notes" rows={3} value={form.notes || ''} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
               : <p className="text-sm text-gray-900">{patient.notes || '-'}</p>}
           </div>
         </div>

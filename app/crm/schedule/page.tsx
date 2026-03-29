@@ -141,7 +141,7 @@ export default function SchedulePage() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+            className="px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
           />
           <span className="text-sm text-gray-500 capitalize">{dayOfWeek}, {formattedDate}</span>
           <button
@@ -397,7 +397,7 @@ function AppointmentModal({
                   placeholder="Поиск по ФИО или телефону..."
                   value={patientSearch}
                   onChange={(e) => setPatientSearch(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
                 />
                 {searchLoading && <p className="text-xs text-gray-400 mt-1">Поиск...</p>}
                 {patients.length > 0 && (
@@ -433,7 +433,7 @@ function AppointmentModal({
             <select
               value={form.doctorId}
               onChange={(e) => setForm({ ...form, doctorId: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
               required
             >
               <option value="">Выберите врача</option>
@@ -453,7 +453,7 @@ function AppointmentModal({
                 type="time"
                 value={form.startTime}
                 onChange={(e) => setForm({ ...form, startTime: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
                 required
               />
             </div>
@@ -463,7 +463,7 @@ function AppointmentModal({
                 type="time"
                 value={form.endTime}
                 onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
                 required
               />
             </div>
@@ -475,7 +475,7 @@ function AppointmentModal({
             <select
               value={form.status}
               onChange={(e) => setForm({ ...form, status: e.target.value })}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             >
               <option value="scheduled">Запланирован</option>
               <option value="confirmed">Подтверждён</option>
@@ -492,7 +492,7 @@ function AppointmentModal({
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
               rows={2}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
               placeholder="Комментарий к записи..."
             />
           </div>

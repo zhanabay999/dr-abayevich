@@ -75,7 +75,7 @@ export default function NewPatientPage() {
               required
               value={form.lastName}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
           <div>
@@ -85,7 +85,7 @@ export default function NewPatientPage() {
               required
               value={form.firstName}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
           <div>
@@ -94,7 +94,7 @@ export default function NewPatientPage() {
               name="middleName"
               value={form.middleName}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function NewPatientPage() {
               value={form.phone}
               onChange={handleChange}
               placeholder="+7 (7xx) xxx-xx-xx"
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
           <div>
@@ -119,7 +119,7 @@ export default function NewPatientPage() {
               type="email"
               value={form.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
         </div>
@@ -133,7 +133,7 @@ export default function NewPatientPage() {
               maxLength={12}
               value={form.iin}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
           <div>
@@ -143,7 +143,7 @@ export default function NewPatientPage() {
               type="date"
               value={form.dateOfBirth}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
           <div>
@@ -152,7 +152,7 @@ export default function NewPatientPage() {
               name="gender"
               value={form.gender}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             >
               <option value="">Не указан</option>
               <option value="male">Мужской</option>
@@ -168,7 +168,7 @@ export default function NewPatientPage() {
             name="address"
             value={form.address}
             onChange={handleChange}
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
           />
         </div>
 
@@ -180,7 +180,7 @@ export default function NewPatientPage() {
               name="insuranceCompany"
               value={form.insuranceCompany}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
           <div>
@@ -189,7 +189,7 @@ export default function NewPatientPage() {
               name="insuranceNumber"
               value={form.insuranceNumber}
               onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
             />
           </div>
         </div>
@@ -202,7 +202,7 @@ export default function NewPatientPage() {
             rows={3}
             value={form.notes}
             onChange={handleChange}
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
           />
         </div>
 
@@ -213,7 +213,7 @@ export default function NewPatientPage() {
             name="source"
             value={form.source}
             onChange={handleChange}
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
           >
             <option value="">Не указан</option>
             <option value="website">Сайт</option>

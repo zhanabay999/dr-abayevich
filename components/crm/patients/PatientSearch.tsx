@@ -20,7 +20,7 @@ export default function PatientSearch({ initialSearch }: { initialSearch: string
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Поиск по ФИО, телефону, ИИН..."
-          className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm"
+          className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900"
         />
         <button
           type="submit"
