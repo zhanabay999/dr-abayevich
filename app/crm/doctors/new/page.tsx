@@ -11,7 +11,9 @@ export default function NewDoctorPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState({
-    name: '',
+    lastName: '',
+    firstName: '',
+    middleName: '',
     specialization: '',
     experience: '',
     education: '',
@@ -34,7 +36,7 @@ export default function NewDoctorPage() {
       const res = await fetch('/api/crm/doctors', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, experience: parseInt(form.experience) || 0, slotDuration: parseInt(form.slotDuration) || 30 }),
+        body: JSON.stringify({ ...form, name: `${form.lastName} ${form.firstName} ${form.middleName}`.trim(), experience: parseInt(form.experience) || 0, slotDuration: parseInt(form.slotDuration) || 30 }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -60,9 +62,19 @@ export default function NewDoctorPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">ФИО *</label>
-          <input name="name" required value={form.name} onChange={handleChange} placeholder="Абаев Арман Сериков" className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Фамилия *</label>
+            <input name="lastName" required value={form.lastName} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Имя *</label>
+            <input name="firstName" required value={form.firstName} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Отчество</label>
+            <input name="middleName" value={form.middleName} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">

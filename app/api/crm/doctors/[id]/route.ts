@@ -34,7 +34,10 @@ export async function PATCH(
   const [updated] = await db
     .update(doctors)
     .set({
-      name: body.name,
+      name: body.name || `${body.lastName || ''} ${body.firstName || ''} ${body.middleName || ''}`.trim(),
+      lastName: body.lastName || null,
+      firstName: body.firstName || null,
+      middleName: body.middleName || null,
       specialization: body.specialization,
       experience: body.experience,
       education: body.education || null,

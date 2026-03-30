@@ -36,7 +36,10 @@ export async function POST(request: NextRequest) {
   const [newDoctor] = await db
     .insert(doctors)
     .values({
-      name: body.name,
+      name: body.name || `${body.lastName || ''} ${body.firstName || ''} ${body.middleName || ''}`.trim(),
+      lastName: body.lastName || null,
+      firstName: body.firstName || null,
+      middleName: body.middleName || null,
       specialization: body.specialization,
       experience: body.experience || 0,
       education: body.education || null,

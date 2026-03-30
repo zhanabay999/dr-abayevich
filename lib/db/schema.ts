@@ -52,7 +52,10 @@ export const services = pgTable('services', {
 // Врачи
 export const doctors = pgTable('doctors', {
   id: serial('id').primaryKey(),
-  name: varchar('name', { length: 255 }).notNull(),
+  name: varchar('name', { length: 255 }).notNull(), // legacy, keep for compat
+  lastName: varchar('last_name', { length: 100 }),
+  firstName: varchar('first_name', { length: 100 }),
+  middleName: varchar('middle_name', { length: 100 }),
   specialization: varchar('specialization', { length: 255 }).notNull(),
   experience: integer('experience').notNull(),
   education: text('education'),

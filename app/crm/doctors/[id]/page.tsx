@@ -38,7 +38,8 @@ export default function DoctorDetailPage() {
     const schedData = await schedRes.json();
     setDoctor(docData.doctor);
     setForm({
-      name: docData.doctor?.name || '', specialization: docData.doctor?.specialization || '',
+      lastName: docData.doctor?.lastName || '', firstName: docData.doctor?.firstName || '',
+      middleName: docData.doctor?.middleName || '', specialization: docData.doctor?.specialization || '',
       experience: docData.doctor?.experience?.toString() || '0', education: docData.doctor?.education || '',
       bio: docData.doctor?.bio || '', workPhone: docData.doctor?.workPhone || '',
       personalPhone: docData.doctor?.personalPhone || '', color: docData.doctor?.color || '#3B82F6',
@@ -61,7 +62,7 @@ export default function DoctorDetailPage() {
     setSaving(true);
     const res = await fetch(`/api/crm/doctors/${id}`, {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, experience: parseInt(form.experience) || 0, slotDuration: parseInt(form.slotDuration) || 30 }),
+      body: JSON.stringify({ ...form, name: `${form.lastName} ${form.firstName} ${form.middleName}`.trim(), experience: parseInt(form.experience) || 0, slotDuration: parseInt(form.slotDuration) || 30 }),
     });
     if (res.ok) { const updated = await res.json(); setDoctor(updated); setEditing(false); }
     setSaving(false);
@@ -134,12 +135,16 @@ export default function DoctorDetailPage() {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           {editing ? (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-xs font-medium text-gray-500 mb-1">ФИО</label><input name="name" value={form.name} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
-                <div><label className="block text-xs font-medium text-gray-500 mb-1">Специализация</label><input name="specialization" value={form.specialization} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
+              <div className="grid grid-cols-3 gap-4">
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">Фамилия</label><input name="lastName" value={form.lastName} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">Имя</label><input name="firstName" value={form.firstName} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">Отчество</label><input name="middleName" value={form.middleName} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
               </div>
               <div className="grid grid-cols-2 gap-4">
+                <div><label className="block text-xs font-medium text-gray-500 mb-1">Специализация</label><input name="specialization" value={form.specialization} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
                 <div><label className="block text-xs font-medium text-gray-500 mb-1">Стаж (лет)</label><input name="experience" type="number" value={form.experience} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900" /></div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
                 <div><label className="block text-xs font-medium text-gray-500 mb-1">Слот (мин)</label>
                   <select name="slotDuration" value={form.slotDuration} onChange={handleChange} className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:border-amber-500 focus:outline-none text-sm text-gray-900">
                     <option value="15">15</option><option value="30">30</option><option value="45">45</option><option value="60">60</option>
