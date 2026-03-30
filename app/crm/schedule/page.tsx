@@ -119,9 +119,9 @@ export default function SchedulePage() {
   if (week.length > 0) { while (week.length < 7) week.push(null); calWeeks.push(week); }
 
   return (
-    <div className="flex gap-4 h-[calc(100vh-8rem)]">
+    <div className="flex gap-4 h-[calc(100vh-8rem)] overflow-hidden">
       {/* LEFT PANEL */}
-      <div className="w-64 shrink-0 flex flex-col gap-4 overflow-y-auto">
+      <div className="w-56 shrink-0 flex-col gap-3 overflow-y-auto hidden lg:flex">
         {/* Mini calendar */}
         <div className="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between mb-2">
@@ -200,8 +200,8 @@ export default function SchedulePage() {
         ) : roomsList.length === 0 ? (
           <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">Нет кабинетов</div>
         ) : (
-          <div className="flex-1 overflow-auto">
-            <div className="flex min-w-max">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden">
+            <div className="flex w-full">
               {/* Time column */}
               <div className="w-14 shrink-0 border-r border-gray-200 bg-gray-50/50">
                 <div className="h-10 border-b border-gray-200" />
@@ -216,7 +216,7 @@ export default function SchedulePage() {
               {roomsList.map(room => {
                 const roomApts = appointments.filter(a => a.roomId === room.id && a.status !== 'cancelled');
                 return (
-                  <div key={room.id} className="flex-1 min-w-[200px] border-r border-gray-100 last:border-r-0">
+                  <div key={room.id} className="flex-1 min-w-0 border-r border-gray-100 last:border-r-0">
                     <div className="h-10 border-b border-gray-200 flex items-center justify-center gap-1.5 px-2 bg-gray-50/80">
                       <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: room.color || '#3B82F6' }} />
                       <span className="text-xs font-semibold text-gray-700">{room.name}</span>
